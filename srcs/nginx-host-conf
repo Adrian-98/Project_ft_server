@@ -1,7 +1,7 @@
 server {
 	listen 80;
 	root /var/www/localhost/wordpress;
-	index index.php index.html index.htm index.nginx-debian.html;
+	index index.php index.html index.htm;
 	server_name wordpress;
 	listen 443 ssl;
 	ssl_certificate /root/mkcert/localhost.pem;

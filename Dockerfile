@@ -5,8 +5,8 @@ MAINTAINER amunoz-p <amunoz-p@student.42madrid.com>
 RUN apt-get update && apt-get -y  install  wget nginx mariadb-server php-fpm php-mysql
 #Nginx set up
 RUN mkdir -p /var/www/localhost
-COPY /srcs/nginx-host-conf /etc/nginx/sites-available/localhost
-RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites_enabled
+COPY srcs/nginx-host-conf  /etc/nginx/sites-available/
+RUN ln -fs /etc/nginx/sites-available/nginx-host-conf /etc/nginx/sites-enabled/default
 
 #SSL SETUP
 RUN mkdir ~/mkcert && \
