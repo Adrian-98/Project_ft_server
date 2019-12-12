@@ -1,6 +1,6 @@
 #get the image from debian buster
 FROM debian:buster
-MAINTAINER amunoz-p <amunoz-p@student.42madrid.com>
+LABEL amunoz-p <amunoz-p@student.42madrid.com>
 #update and install nginx & phpmyadmin & mysql & wegt
 RUN apt-get update && apt-get -y  install  wget nginx mariadb-server php-fpm php-mysql
 #Nginx set up
@@ -18,12 +18,13 @@ RUN mkdir ~/mkcert && \
 	./mkcert localhost
 
 #DATABASE SETUP
+COPY srcs/wordpress.sql .
 RUN service mysql start && \
 echo "CREATE DATABASE wordpress;" | mysql -u root && \
 echo "GRANT ALL PRIVILEGES ON wordpress.* TO 'root'@'localhost';" | mysql -u root && \
 echo "FLUSH PRIVILEGES;" | mysql -u root && \
-echo "update mysql.user set plugin = 'mysql_native_password' where user='root';" | mysql -u root 
-#RUN	mysql wordpress -u root --password=  < wordpress.sql
+echo "update mysql.user set plugin = 'mysql_native_password' where user='root';" | mysql -u root && \
+mysql wordpress -u root --password= < wordpress.sql > hide
 
 #WORDPRESS INSTALL
 RUN wget https://wordpress.org/latest.tar.gz && \
@@ -42,6 +43,7 @@ RUN rm -rf phpMyAdmin-4.9.0.1-english.tar.gz
 
 #ALLOW NGINX USER
 RUN chown -R www-data:www-data /var/www/localhost/* && chmod -R 755 /var/www/localhost/*
+
 EXPOSE 80 443
 
 CMD service nginx start && \
